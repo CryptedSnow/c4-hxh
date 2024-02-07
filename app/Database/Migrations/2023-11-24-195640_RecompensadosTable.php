@@ -13,9 +13,9 @@ class RecompensadosTable extends Migration
             'recompensa_id' => ['type' => 'INT'],
             'hunter_id' => ['type' => 'INT'],
             'concluida' => ['type' => 'BOOLEAN'],
-            'created_at' => ['TIMESTAMP', 'NULL' => false],
-            'updated_at' => ['TIMESTAMP', 'NULL' => true],
-            'deleted_at' => ['TIMESTAMP', 'NULL' => true],
+            'created_at' => ['type' => 'TIMESTAMP', 'NULL' => true],
+            'updated_at' => ['type' => 'TIMESTAMP', 'NULL' => true],
+            'deleted_at' => ['type' => 'TIMESTAMP', 'NULL' => true],
         ]);
         $this->forge->addKey('id', TRUE);
         $this->forge->createTable('recompensados', TRUE);

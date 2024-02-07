@@ -1,7 +1,7 @@
 <?= $this->extend('template/template') ?>
 
 <?= $this->section('title') ?>
-    Listar Hunters
+    Listar Hunters Excluídos
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -10,19 +10,15 @@
 
         <div class="card">
             <div class="card-header">
-                <h4>Listar Hunters
-                    <a href="<?php echo site_url('recompensa/index') ?>" class="btn btn-info float-center"><i class="fa fa-sack-dollar"></i>&nbsp;Recompensas</a>
-                    <a href="<?php echo site_url('recompensado/index') ?>" class="btn btn-dark float-center"><i class="fa fa-hand-holding-dollar"></i>&nbsp;Recompensados</a>
-                    <a href="<?php echo site_url('hunter/create') ?>" class="btn btn-success float-center"><i class="fa fa-plus"></i>&nbsp;Add Hunter</a>
-                    <a href="<?php echo site_url('hunter/trash') ?>" class="btn btn-danger float-center"><i class="fa fa-dumpster"></i>&nbsp;Lixeira de Hunters</a>
-                    <a href="<?php echo site_url('logs') ?>" class="btn btn-warning float-center" target="_blank"><i class="fa fa-circle-info"></i>&nbsp;Logs</a>
+                <h4>Lixeira de Hunters
+                    <a href="<?php echo site_url('/') ?>" class="btn btn-secondary float-end"><i class="fa fa-arrow-left"></i>&nbsp; Voltar</a> 
                 </h4>
             </div>
         </div>
 
-        <form action="<?= site_url('hunter/search') ?>" method="GET" class="form-inline">
+        <form action="<?= site_url('hunter/search-trash') ?>" method="GET" class="form-inline">
             <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Filtrar por nome">
+                <input type="text" name="search" class="form-control" placeholder="Filtrar por descrição">
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-primary"><i class="fa fa-magnifying-glass"></i></i>&nbsp;Filtrar</button>
                     </div>
@@ -57,12 +53,11 @@
                         <td><?php echo date('d/m/Y', strtotime($h['inicio'])); ?></td>
                         <td><?php echo date('d/m/Y', strtotime($h['termino'])); ?></td>
                         <td>
-                            <a href="<?php echo base_url('hunter/view/'.$h['id']);?>" class="btn btn-dark btn-sm"><i class="fa fa-eye"></i>&nbsp;Visualizar</a>
-                            <a href="<?php echo base_url('hunter/edit/'.$h['id']);?>" class="btn btn-primary btn-sm"><i class="fa fa-arrows-rotate"></i>&nbsp;Atualizar</a>
-                            <form method="POST" action="<?php echo base_url('hunter/delete/'.$h['id']);?>">
+                            <a href="<?php echo base_url('hunter/restore/'.$h['id']);?>" class="btn btn-primary btn-sm"><i class="fa fa-arrows-rotate"></i>&nbsp;Restaurar</a>
+                            <form method="POST" action="<?php echo base_url('hunter/delete-permantently/'.$h['id']);?>">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="_method" value="DELETE">
-                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>&nbsp;Deletar</button>
+                                <!-- <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>&nbsp;Deletar</button> -->
                             </form>
                         </td>
                     </tr>

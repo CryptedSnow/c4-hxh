@@ -41,7 +41,7 @@ class Database extends Config
         'compress'     => false,
         'strictOn'     => false,
         'failover'     => [],
-        'port'         => 5432,
+        'port'         => 3306,
         'numberNative' => false,
     ];
 
@@ -75,6 +75,12 @@ class Database extends Config
     {
         parent::__construct();
 
+        // Configuração padrão
+        $this->default['unix_socket'] = '/opt/lampp/var/mysql/mysql.sock';
+
+        // Configuração de teste
+        $this->tests['unix_socket'] = '/opt/lampp/var/mysql/mysql.sock';
+        
         // Ensure that we always set the database group to 'tests' if
         // we are currently running an automated test suite, so that
         // we don't overwrite live data on accident.

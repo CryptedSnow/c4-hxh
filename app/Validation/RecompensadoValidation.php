@@ -10,14 +10,14 @@ class RecompensadoValidation
     // }
 
     public array $recompensado_store = [
-        'recompensa_id' => 'required|exists:recompensas,_id',
-        'hunter_id' => 'required|exists:hunters,_id',
-        'concluida' => 'required|in:true',
+        'recompensa_id' => 'required|integer',
+        'hunter_id' => 'required|integer',
+        'concluida' => 'required',
     ];
 
     public array $recompensado_update = [
-        'recompensa_id' => 'required|exists:recompensas,_id',
-        'hunter_id' => 'required|exists:hunters,_id',
-        'concluida' => 'required|boolean',
+        'recompensa_id' => 'required|integer',
+        'hunter_id' => 'required|integer',
+        'concluida' => 'required',
     ];
 }

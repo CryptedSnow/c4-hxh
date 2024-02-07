@@ -1,7 +1,7 @@
 <?= $this->extend('template/template') ?>
 
 <?= $this->section('title') ?>
-    Visualizar Hunter
+    Visualizar <?php echo $hunters['nome_hunter']; ?>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -9,7 +9,7 @@
 <div class="card-body">
     
     <div class="d-flex justify-content-end">
-        <a href="<?php echo site_url('hunter/index') ?>" class="btn btn-secondary float-end"><i class="fa fa-arrow-left"></i>&nbsp; Voltar</a>
+        <a href="<?php echo site_url('/') ?>" class="btn btn-secondary float-end"><i class="fa fa-arrow-left"></i>&nbsp; Voltar</a>
     </div>
 
     <form>
@@ -41,9 +41,13 @@
         <div class="form-group">
             <label for="tipo_hunter_id">Tipo de Hunter:</label>
             <select class="form-control" name="tipo_hunter_id" disabled>
-                <?php foreach ($tipos_hunters as $id => $th): ?>
-                    <option <?= ($hunters['tipo_hunter_id'] == $id) ? 'selected' : '' ?> value="<?= $id ?>"><?= $th['descricao'] ?></option>
-                <?php endforeach; ?>
+                <?php if (empty($tipos_hunters)): ?>
+                    <option><?= 'Sem registros de tipos de Hunter' ?></option>
+                <?php else: ?>
+                    <?php foreach ($tipos_hunters as $id => $th): ?>
+                        <option <?= ($hunters['tipo_hunter_id'] == $id) ? 'selected' : '' ?> value="<?= $id ?>"><?= $th['descricao'] ?></option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </select>
             <?php echo session()->getFlashdata('errors')["tipo_hunter_id"] ?? "";?>
         </div>
@@ -51,10 +55,14 @@
         <div class="form-group">
             <label for="tipo_nen_id">Tipo de Nen:</label>
             <select class="form-control" name="tipo_nen_id" disabled>
-                <option <?= (empty($hunters['tipo_nen_id'])) ? 'selected' : '' ?> value=""><?= 'Escolha o tipo de Nen' ?></option>
-                <?php foreach ($tipos_nens as $id => $tn): ?>
-                    <option <?= ($hunters['tipo_nen_id'] == $id) ? 'selected' : '' ?> value="<?= $id ?>"><?= $tn['descricao'] ?></option>
-                <?php endforeach; ?>
+                <?php if (empty($tipos_nens)): ?>
+                    <option><?= 'Sem registros de tipos de Nen' ?></option>
+                <?php else: ?>
+                    <option <?= (empty($hunters['tipo_nen_id'])) ? 'selected' : '' ?> value=""><?= 'Escolha o tipo de Nen' ?></option>
+                    <?php foreach ($tipos_nens as $id => $tn): ?>
+                        <option <?= ($hunters['tipo_nen_id'] == $id) ? 'selected' : '' ?> value="<?= $id ?>"><?= $tn['descricao'] ?></option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </select>
             <?php echo session()->getFlashdata('errors')["tipo_nen_id"] ?? "";?>
         </div>
@@ -62,10 +70,14 @@
         <div class="form-group">
             <label for="tipo_sangue_id">Tipo sanguíneo:</label>
             <select class="form-control" name="tipo_sangue_id" disabled>
-                <option <?= (empty($hunters['tipo_sangue_id'])) ? 'selected' : '' ?> value=""><?= 'Escolha o tipo sanguíneo' ?></option>
-                <?php foreach ($tipos_sanguineos as $id => $ts): ?>
-                    <option <?= ($hunters['tipo_sangue_id'] == $id) ? 'selected' : '' ?> value="<?= $id ?>"><?= $ts['descricao'] ?></option>
-                <?php endforeach; ?>
+                <?php if (empty($tipos_sanguineos)): ?>
+                    <option><?= 'Sem registros de tipos sanguíneos' ?></option>
+                <?php else: ?>
+                    <option <?= (empty($hunters['tipo_sangue_id'])) ? 'selected' : '' ?> value=""><?= 'Escolha o tipo sanguíneo' ?></option>
+                    <?php foreach ($tipos_sanguineos as $id => $ts): ?>
+                        <option <?= ($hunters['tipo_sangue_id'] == $id) ? 'selected' : '' ?> value="<?= $id ?>"><?= $ts['descricao'] ?></option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </select>
             <?php echo session()->getFlashdata('errors')['tipo_sangue_id'] ?? ""; ?>
         </div>

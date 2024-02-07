@@ -12,9 +12,9 @@ class RecompensasTable extends Migration
             'id' => ['type' => 'INT', 'constraint' => 5, 'unsigned' => true, 'auto_increment' => true],
             'descricao_recompensa' => ['type' => 'VARCHAR', 'constraint' => 255],
             'valor_recompensa' => ['type' => 'DOUBLE PRECISION'],
-            'created_at' => ['TIMESTAMP', 'NULL' => false],
-            'updated_at' => ['TIMESTAMP', 'NULL' => true],
-            'deleted_at' => ['TIMESTAMP', 'NULL' => true],
+            'created_at' => ['type' => 'TIMESTAMP', 'NULL' => true],
+            'updated_at' => ['type' => 'TIMESTAMP', 'NULL' => true],
+            'deleted_at' => ['type' => 'TIMESTAMP', 'NULL' => true],
         ]);
         $this->forge->addKey('id', TRUE);
         $this->forge->createTable('recompensas', TRUE);

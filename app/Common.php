@@ -13,3 +13,7 @@
  *
  * @see: https://codeigniter.com/user_guide/extending/common.html
  */
+
+if (! function_exists('putenv')) {
+    function putenv(string $assignment) {}
+}
