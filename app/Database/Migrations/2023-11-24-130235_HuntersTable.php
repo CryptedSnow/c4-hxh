@@ -3,8 +3,6 @@
 namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
-use CodeIgniter\Database\Migration\Forge;
-use CodeIgniter\Database\Migration\ForeignKeyConstraint;
 
 class HuntersTable extends Migration
 {
@@ -25,13 +23,11 @@ class HuntersTable extends Migration
             'updated_at' => ['type' => 'TIMESTAMP', 'NULL' => true],
             'deleted_at' => ['type' => 'TIMESTAMP', 'NULL' => true],
         ]);
-
         $this->forge->addKey('id', TRUE);
         $this->forge->createTable('hunters', TRUE);
         $this->forge->addForeignKey('tipo_hunter_id', 'tipos_hunters', 'id');
         $this->forge->addForeignKey('tipo_nen_id', 'tipos_nens', 'id');
         $this->forge->addForeignKey('tipo_sangue_id', 'tipos_sanguineos', 'id');
-
     }
 
     public function down()

@@ -82,7 +82,11 @@ class RecompensadoController extends BaseController
             'concluida' => (boolean) $this->request->getVar('concluida'),
         ];
         $model->insert($dados_tratados);
-        return redirect()->to(route_to('indexRecompensado'))->with('success', "Recompensado foi inserido com sucesso.");
+        $id = $model->insertID();
+        $registro_cadastrado = $model->select('recompensados.*, hunters.nome_hunter')
+        ->join('hunters', 'hunters.id = recompensados.hunter_id')->find($id);
+        $nome_recompensado = $registro_cadastrado['nome_hunter'];
+        return redirect()->to(route_to('indexRecompensado'))->with('success', "Recompensado $nome_recompensado foi inserido com sucesso.");
     }
 
     public function view($id)
@@ -140,14 +144,21 @@ class RecompensadoController extends BaseController
             'concluida' => (boolean) $this->request->getVar('concluida'),
         ];
         $model->update($id, $dados_tratados);
-        return redirect()->to(route_to('indexRecompensado'))->with('info', "Recompensado foi atualizada com sucesso.");
+        $registro_cadastrado = $model->select('recompensados.*, hunters.nome_hunter')
+        ->join('hunters', 'hunters.id = recompensados.hunter_id')->find($id);
+        $nome_recompensado = $registro_cadastrado['nome_hunter'];
+        return redirect()->to(route_to('indexRecompensado'))->with('info', "Recompensado $nome_recompensado foi atualizada com sucesso.");
     }
 
     public function delete($id)
     {
         $model = new RecompensadoModel();
+        $registro_cadastrado = $model->select('recompensados.*, hunters.nome_hunter')
+        ->join('hunters', 'hunters.id = recompensados.hunter_id')->find($id);
+        $nome_recompensado = $registro_cadastrado['nome_hunter'];
         $model->delete($id);
-        return redirect()->to(route_to('indexRecompensado'))->with('warning', "Recompensado foi enviado para a lixeira.");
+        log_message('warning', "Recompensado $nome_recompensado foi enviado para a lixeira.");
+        return redirect()->to(route_to('indexRecompensado'))->with('warning', "Recompensado $nome_recompensado foi enviado para a lixeira.");
     }
 
     public function onlyDeleted()
@@ -202,19 +213,19 @@ class RecompensadoController extends BaseController
 
     public function deletePermanently($id)
     {
-        $model = new HunterModel();
-        $recompensado = new RecompensadoModel();
+        $model = new RecompensadoModel();
         $registro_deletado = $model->onlyDeleted()
         ->select('recompensados.*, hunters.nome_hunter')
-        ->join('hunters', 'hunters.id = recompensados.hunter_id', 'left')->find($id);
-        $nome_hunter = $registro_deletado['nome_hunter'];
-        $quantidade_hunters = $recompensado->where('hunter_id', $id)->countAllResults();
-        if ($quantidade_hunters > 0){
-            return redirect()->to(route_to('trashRecompensado'))->with('warning', "Não é possível excluir $nome_hunter permanentemente, pois está associado em $quantidade_hunters registro(s) de recompensados.");
+        ->join('hunters', 'hunters.id = recompensados.hunter_id')->find($id);
+        $nome = $registro_deletado['nome_hunter'];
+        if ($registro_deletado){
+            $model->onlyDeleted()->where('id', $id)->purgeDeleted();
+            log_message('alert', "Recompensado $nome foi excluído(a) permanentemente.");
+            return redirect()->to(route_to('trashRecompensado'))->with('danger', "Recompensado $nome foi excluído(a) permanentemente.");
+        } else {
+            return redirect()->to(route_to('trashRecompensado'))->with('warning', "Não é possível excluir o recompensado $nome permanentemente.");
         }
-        $model->onlyDeleted()->where('id', $id)->purgeDeleted();
-        log_message('alert', "Recompensado foi excluído(a) permanentemente.");
-        return redirect()->to(route_to('trashRecompensado'))->with('danger', "Recompensado $nome_hunter foi excluído(a) permanentemente.");
+        
     }
 
 }
