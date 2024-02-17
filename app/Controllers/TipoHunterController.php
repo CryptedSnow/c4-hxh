@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\TipoHunterModel;
+use App\Validation\TipoHunterValidation;
 
 class TipoHunterController extends ResourceController
 {
@@ -11,16 +12,20 @@ class TipoHunterController extends ResourceController
     {
         $tipo_hunter = new TipoHunterModel();
         $dados = $tipo_hunter->findAll();
-        $this->response->setContentType('application/json');
-        return $this->response->setJSON($dados);
+        return $this->respond($dados);
     }
 
     public function create()
     {
+        $validacoes = new TipoHunterValidation();
+        if (!$this->validate($validacoes->tipo_hunter_store)) {
+            return $this->failValidationErrors($this->validator->getErrors());
+        }
         $tipo_hunter = new TipoHunterModel();
-        $validacao = $tipo_hunter->getRuleGroup('hunter_store');
-        $this->response->setContentType('application/json');
-        return $this->response->setStatusCode(200)->setJSON(['message' => 'Inserção bem-sucedia']);
+        $data = $this->request->getJSON();
+        $id = $tipo_hunter->insert($data);
+        $registro = $tipo_hunter->find($id);
+        return $this->respondCreated($registro);
     }
 
     public function show($id = null)
@@ -28,22 +33,26 @@ class TipoHunterController extends ResourceController
         $tipo_hunter = new TipoHunterModel();
         $registro = $tipo_hunter->find($id);
         if (!$tipo_hunter) {
-            return $this->response->setStatusCode(404)->setJSON(['message' => "Registro $id não encontrado"]);
+            return $this->failNotFound("Registro $id não encontrado.");
         }
-        $this->response->setContentType('application/json');
-        return $this->response->setJSON($registro);
+        return $this->respond($registro);
     }
 
     public function update($id = null)
     {
+        $validacoes = new TipoHunterValidation();
+        if (!$this->validate($validacoes->tipo_hunter_update)) {
+            return $this->failValidationErrors($this->validator->getErrors());
+        }
         $tipo_hunter = new TipoHunterModel();
         $registro = $tipo_hunter->find($id);
         if (!$registro) {
-            return $this->response->setStatusCode(404)->setJSON(['message' => "Registro $id não encontrado"]);
+            return $this->failNotFound("Registro $id não encontrado.");
         }
-        $validacao = $registro->getRuleGroup('hunter_update');
-        $this->response->setContentType('application/json');
-        return $this->response->setJSON($registro);
+        $dados = $this->request->getJSON();
+        $tipo_hunter->update($id, $dados);
+        $registro_atualizado = $tipo_hunter->find($id);
+        return $this->respondUpdated($registro_atualizado);
     }
 
     public function delete($id = null)
@@ -51,10 +60,9 @@ class TipoHunterController extends ResourceController
         $tipo_hunter = new TipoHunterModel();
         $registro = $tipo_hunter->find($id);
         if (!$registro) {
-            return $this->response->setStatusCode(404)->setJSON(['message' => "Registro $id não encontrado"]);
+            return $this->failNotFound("Registro $id não encontrado.");
         }
-        $registro->delete($id);
-        $this->response->setContentType('application/json');
-        return $this->response->setStatusCode(200)->setJSON(['message' => 'Exclusão bem-sucedida']);
+        $tipo_hunter->delete($id);
+        return $this->respondDeleted($registro);
     }
 }

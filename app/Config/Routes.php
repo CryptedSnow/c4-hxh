@@ -9,14 +9,20 @@ use App\Controllers\{Home,HunterController,RecompensaController,RecompensadoCont
 
  $routes->setDefaultNamespace('App\Controllers');
 
+ //$routes->get('/', [Home::class, 'index']);
+
 // API Restful (Address)
 // GET: localhost:8080/tipo-hunter
 // POST: localhost:8080/tipo-hunter
 // GET: localhost:8080/tipo-hunter/{:num}
 // PATCH: localhost:8080/tipo-hunter/{:num}
 // DELETE: localhost:8080/tipo-hunter/{:num}
-$routes->resource('tipo-hunter', ['controller' => TipoHunterController::class]);
-//$routes->get('/', [Home::class, 'index']);
+//$routes->resource('tipo-hunter', ['controller' => TipoHunterController::class]);
+$routes->get('tipo-hunter', [TipoHunterController::class, 'index']);  
+$routes->post('tipo-hunter', [TipoHunterController::class, 'create']);
+$routes->get('tipo-hunter/(:num)', [TipoHunterController::class, 'show']);
+$routes->put('tipo-hunter/(:num)', [TipoHunterController::class, 'update']);
+$routes->delete('tipo-hunter/(:num)', [TipoHunterController::class, 'delete']);
 
 $routes->get('/', [HunterController::class, 'index'], ['as' => 'indexHunter']);
 $routes->get('hunter/create', [HunterController::class, 'create']);

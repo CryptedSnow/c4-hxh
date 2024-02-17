@@ -2,7 +2,14 @@
 
 ## How to start?
 
-Advice: To get commands of CodeIgniter framework use this command:
+**First advice**: Verify if has `cache` folder inside of `writable` folder of application to avoid `PHP Fatal error:  Uncaught CodeIgniter\Cache\Exceptions\CacheException: Cache unable to write to "/address/CodeIgniter/c4-hxh/writable/cache/". in /address/CodeIgniter/c4-hxh/vendor/codeigniter4/framework/system/Cache/Handlers/FileHandler.php:66`, see below to solve this:
+```
+# Verify your operating system and where you store the application (I'm using Ubuntu distro)
+user@user:~$ cd ~/address/c4-hxh/writable
+user@user:~/address/c4-hxh/writable$ mkdir cache
+```
+
+**Second advice**: To get commands of CodeIgniter framework use this command:
 ```
 php spark list
 ```
