@@ -19,6 +19,7 @@ class HunterValidation
         'tipo_sangue_id' => 'required|integer',
         'inicio' => 'required|valid_date',
         'termino' => 'required|valid_date',
+        'avatar' => 'uploaded[avatar.0]|is_image[avatar]',
     ];
 
     public array $hunter_update = [
@@ -31,6 +32,7 @@ class HunterValidation
         'tipo_sangue_id' => 'required|integer',
         'inicio' => 'required|valid_date',
         'termino' => 'required|valid_date',
+        'avatar' => 'permit_empty',
     ];
 
 }

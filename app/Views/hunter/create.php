@@ -12,7 +12,7 @@
         <a href="<?php echo site_url('/') ?>" class="btn btn-secondary float-end"><i class="fa fa-arrow-left"></i>&nbsp; Voltar</a>
     </div>
 
-    <form method="POST" action="<?= site_url('hunter/store') ?>">
+    <form method="POST" action="<?= site_url('hunter/store') ?>" enctype="multipart/form-data">
         <?= csrf_field() ?>
         <div class="form-group">
             <label for="nome_hunter">Nome:</label>
@@ -93,6 +93,12 @@
             <label for="termino">Término:</label>
             <input class="form-control <?= isset($errors['termino']) ? 'is-invalid' : '' ?>" name="termino" type="date" min="<?= date('Y-m-d') ?>" value="<?= old('termino') ?>" />
             <?php echo session()->getFlashdata('errors')["termino"] ?? "";?>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="avatar">Avatar:</label>
+            <input class="form-control <?= isset($errors['avatar']) ? 'is-invalid' : '' ?>" name="avatar[]" type="file" multiple value="<?= old('avatar') ?>" />
+            <?php echo session()->getFlashdata('errors')["avatar"] ?? "";?>
         </div>
         <br>
         <button type="submit" class="btn btn-success" title="Cadastrar"><i class="fa fa-plus"></i>&nbsp;Cadastrar</button>

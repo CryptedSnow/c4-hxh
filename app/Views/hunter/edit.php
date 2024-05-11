@@ -12,7 +12,7 @@
         <a href="<?php echo site_url('/') ?>" class="btn btn-secondary float-end"><i class="fa fa-arrow-left"></i>&nbsp; Voltar</a>
     </div>
 
-    <form method="POST" action="<?= site_url('hunter/update/'.$hunters['id']) ?>">
+    <form method="POST" action="<?= site_url('hunter/update/'.$hunters['id']) ?>" enctype="multipart/form-data">
         <?= csrf_field() ?>
         <input type="hidden" name="_method" value="PATCH">
         <div class="form-group">
@@ -94,6 +94,12 @@
             <label for="termino">Término:</label>
             <input class="form-control" name="termino" type="date" min="<?= date('Y-m-d') ?>" value="<?php echo $hunters['termino']; ?>" />
             <?php echo session()->getFlashdata('errors')["termino"] ?? "";?>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="avatar">Avatar:</label>
+            <input class="form-control <?= isset($errors['avatar']) ? 'is-invalid' : '' ?>" name="avatar[]" type="file" multiple />
+            <?php echo session()->getFlashdata('errors')["avatar"] ?? "";?>
         </div>
         <br>
         <button type="submit" class="btn btn-primary"><i class="fa fa-arrows-rotate"></i>&nbsp;Atualizar</button>
