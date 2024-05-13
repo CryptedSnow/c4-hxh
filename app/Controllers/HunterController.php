@@ -3,9 +3,11 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use CodeIgniter\HTTP\Response;
 use App\Models\{AvatarHunterModel,HunterModel,RecompensadoModel,TipoHunterModel,TipoSanguineoModel,TipoNenModel};
 use App\Validation\HunterValidation;
 use CILogViewer\CILogViewer;
+use ZipArchive;
 
 class HunterController extends BaseController
 {
@@ -343,6 +345,90 @@ class HunterController extends BaseController
             } else {
                 unlink($file);
             }
+        }
+    }
+
+    public function downloadZip($id)
+    {
+        $model = new HunterModel();
+        $avatar_hunter_model = new AvatarHunterModel();
+        $nome = $model->find($id);
+        if (!$nome) {
+            return "Registro não encontrado.";
+        }
+        $nome_hunter = $nome['nome_hunter'];
+        $nome_zip = "Hunter {$nome_hunter}.zip";
+        $zip_caminho = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $nome_zip;
+        $zip_archive = new ZipArchive();
+        if ($zip_archive->open($zip_caminho, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+            $files = $avatar_hunter_model->getAvatarFiles($id);
+            if (empty($files)) {
+                return "Nenhum arquivo de avatar encontrado para o ID {$id}.";
+            }
+            foreach ($files as $file) {
+                $file_path = $file['path'];
+                $file_name = basename($file_path);
+                if (strtolower($file_name) === 'index.html') {
+                    continue;
+                }
+                $zip_archive->addFile($file_path, $file_name);
+            }
+            $zip_archive->close();
+            if (file_exists($zip_caminho)) {
+                $response = new Response(null, 200);
+                $response->setContentType('application/octet-stream');
+                $response->setHeader('Content-Disposition', 'attachment; filename="' . $nome_zip . '"');
+                $response->setHeader('Content-Length', filesize($zip_caminho));
+                $response->setBody(file_get_contents($zip_caminho));
+                unlink($zip_caminho);
+                return $response;
+            } else {
+                return "O arquivo zip não foi encontrado.";
+            }
+        } else {
+            return "Não foi possível criar o arquivo zip para os arquivos de {$nome_hunter}.";
+        }
+    }
+
+    public function downloadTrashZip($id)
+    {
+        $model = new HunterModel();
+        $avatar_hunter_model = new AvatarHunterModel();
+        $nome = $model->onlyDeleted()->find($id);
+        if (!$nome) {
+            return "Registro não encontrado.";
+        }
+        $nome_hunter = $nome['nome_hunter'];
+        $nome_zip = "Hunter {$nome_hunter}.zip";
+        $zip_caminho = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $nome_zip;
+        $zip_archive = new ZipArchive();
+        if ($zip_archive->open($zip_caminho, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+            $files = $avatar_hunter_model->getAvatarTrashFiles($id);
+            if (empty($files)) {
+                return "Nenhum arquivo de avatar encontrado para o ID {$id}.";
+            }
+            foreach ($files as $file) {
+                $file_path = $file['path'];
+                $file_name = basename($file_path);
+                if (strtolower($file_name) === 'index.html') {
+                    continue;
+                }
+                $zip_archive->addFile($file_path, $file_name);
+            }
+            $zip_archive->close();
+            if (file_exists($zip_caminho)) {
+                $response = new Response(null, 200);
+                $response->setContentType('application/octet-stream');
+                $response->setHeader('Content-Disposition', 'attachment; filename="' . $nome_zip . '"');
+                $response->setHeader('Content-Length', filesize($zip_caminho));
+                $response->setBody(file_get_contents($zip_caminho));
+                unlink($zip_caminho);
+                return $response;
+            } else {
+                return "O arquivo zip não foi encontrado.";
+            }
+        } else {
+            return "Não foi possível criar o arquivo zip para os arquivos de {$nome_hunter}.";
         }
     }
 

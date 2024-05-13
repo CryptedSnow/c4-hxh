@@ -54,6 +54,7 @@
                         <td><?php echo date('d/m/Y', strtotime($h['termino'])); ?></td>
                         <td>
                             <a href="<?php echo base_url('hunter/restore/'.$h['id']);?>" class="btn btn-primary btn-sm"><i class="fa fa-arrows-rotate"></i>&nbsp;Restaurar</a>
+                            <a href="<?php echo base_url('hunter/download-zip-trash/'.$h['id']);?>" class="btn btn-warning btn-sm"><i class="fa fa-file-zipper"></i>&nbsp;Download</a>
                             <form method="POST" action="<?php echo base_url('hunter/delete-permantently/'.$h['id']);?>">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="_method" value="DELETE">

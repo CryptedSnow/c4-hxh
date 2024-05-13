@@ -43,4 +43,43 @@ class AvatarHunterModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getAvatarFiles($id)
+    {
+        $avatar_diretorio = WRITEPATH . 'uploads/avatars/' . $id;
+        if (!is_dir($avatar_diretorio)) {
+            return [];
+        }
+        $arquivos = glob($avatar_diretorio . '/*');
+        $arquivo_lista = [];
+        foreach ($arquivos as $a) {
+            if (is_file($a)) {
+                $arquivo_lista[] = [
+                    'name' => basename($a),
+                    'path' => $a,
+                ];
+            }
+        }
+        return $arquivo_lista;
+    }
+
+    public function getAvatarTrashFiles($id)
+    {
+        $avatar_diretorio = WRITEPATH . 'uploads/trash/avatars/' . $id;
+        if (!is_dir($avatar_diretorio)) {
+            return [];
+        }
+        $arquivos = glob($avatar_diretorio . '/*');
+        $arquivo_lista = [];
+        foreach ($arquivos as $a) {
+            if (is_file($a)) {
+                $arquivo_lista[] = [
+                    'name' => basename($a),
+                    'path' => $a,
+                ];
+            }
+        }
+        return $arquivo_lista;
+    }
+
 }
