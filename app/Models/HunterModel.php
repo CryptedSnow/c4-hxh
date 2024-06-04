@@ -48,4 +48,41 @@ class HunterModel extends Model
     {
         return $this->find($id);
     }
+
+    public function deleteDirectoryContents($dir) {
+        foreach(glob($dir . '/*') as $file) {
+            if(is_dir($file)) { 
+                $this->deleteDirectoryContents($file);
+                rmdir($file);
+            } else {
+                unlink($file);
+            }
+        }
+    }
+
+    public function moveDirectory($source, $destination) {
+        if (!is_dir($source)) {
+            return false;
+        }
+        if (!is_dir($destination)) {
+            mkdir($destination, 0777, true);
+        }
+        $directory = dir($source);
+        while (false !== ($entry = $directory->read())) {
+            if ($entry == '.' || $entry == '..') {
+                continue;
+            }
+            $sourcePath = $source . '/' . $entry;
+            $destinationPath = $destination . '/' . $entry;
+            if (is_dir($sourcePath)) {
+                $this->moveDirectory($sourcePath, $destinationPath);
+                rmdir($sourcePath);
+            } else {
+                rename($sourcePath, $destinationPath);
+            }
+        }
+        $directory->close();
+        return true;
+    }
+
 }

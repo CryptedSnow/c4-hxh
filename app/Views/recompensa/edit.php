@@ -23,7 +23,7 @@
         <br>
         <div class="form-group">
             <label for="valor_recompensa">Valor:</label>
-            <input type="text" class="form-control" name="valor_recompensa" placeholder="Digite o valor da recompensa" value="<?php echo $recompensas['valor_recompensa']; ?>">
+            <input type="text" class="form-control" name="valor_recompensa" placeholder="Digite o valor da recompensa" value="<?php echo $recompensas['valor_recompensa']; ?>" onkeypress="$(this).mask('0000000.00', {reverse: true});">
             <?php echo session()->getFlashdata('errors')["valor_recompensa"] ?? "";?>
         </div>
         <br>

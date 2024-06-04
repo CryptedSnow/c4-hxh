@@ -9,6 +9,7 @@
     <script src="<?= base_url('assets/pooper.min.js')?>"></script>
     <script src="<?= base_url('assets/jquery-3.7.1.slim.js')?>"></script>
     <script src="<?= base_url('assets/font-awesome.js')?>"></script>
+    <script src="<?= base_url('assets/jquery.mask.min.js')?>"></script>
     <title><?= $this->renderSection('title')?></title>
 </head>
 <body>

@@ -184,10 +184,21 @@ class HunterController extends BaseController
         if ($this->request->getFileMultiple('avatar')[0]->isValid()) {
             $avatar_hunter_model = new AvatarHunterModel();
             $avatar_hunter_model->where('hunter_id', $id)->delete();
+            $caminho_diretorio = WRITEPATH . 'uploads/avatars/' . $id;
+            if (is_dir($caminho_diretorio)) {
+                $files = glob($caminho_diretorio . '/*'); 
+                foreach ($files as $file) {
+                    if (is_file($file)) {
+                        unlink($file);
+                    }
+                }
+            } else {
+                mkdir($caminho_diretorio, 0777, true);
+            }
             foreach ($this->request->getFileMultiple('avatar') as $avatar) {
                 $nome_original = $avatar->getName();
                 $caminho_imagem = 'uploads/avatars/' . $id . '/' . $nome_original;
-                $avatar->move(WRITEPATH . 'uploads/avatars/' . $id, $nome_original);
+                $avatar->move($caminho_diretorio, $nome_original);
                 $avatar_hunter_model->insert([
                     'hunter_id' => $id,
                     'imagem' => $caminho_imagem,
@@ -211,7 +222,7 @@ class HunterController extends BaseController
             if (!is_dir($trash_avatars_caminho)) {
                 mkdir($trash_avatars_caminho, 0777, true);
             }
-            $this->moveDirectory($caminho_imagem, $trash_avatars_caminho);
+            $model->moveDirectory($caminho_imagem, $trash_avatars_caminho);
             if (is_dir($caminho_imagem)) {
                 rmdir($caminho_imagem);
             }
@@ -304,48 +315,12 @@ class HunterController extends BaseController
         }
         $model->onlyDeleted()->where('id', $id)->purgeDeleted();
         $trash_avatars_caminho = WRITEPATH . 'uploads/trash/avatars/' . $id;
-        $this->deleteDirectoryContents($trash_avatars_caminho);
+        $model->deleteDirectoryContents($trash_avatars_caminho);
         if (is_dir($trash_avatars_caminho)) {
             rmdir($trash_avatars_caminho);
         }
         log_message('alert', "Hunter $nome_hunter foi excluído(a) permanentemente.");
         return redirect()->to(route_to('trashHunter'))->with('danger', "Hunter $nome_hunter foi excluído(a) permanentemente.");
-    }
-
-    private function moveDirectory($source, $destination) {
-        if (!is_dir($source)) {
-            return false;
-        }
-        if (!is_dir($destination)) {
-            mkdir($destination, 0777, true);
-        }
-        $directory = dir($source);
-        while (false !== ($entry = $directory->read())) {
-            if ($entry == '.' || $entry == '..') {
-                continue;
-            }
-            $sourcePath = $source . '/' . $entry;
-            $destinationPath = $destination . '/' . $entry;
-            if (is_dir($sourcePath)) {
-                $this->moveDirectory($sourcePath, $destinationPath);
-                rmdir($sourcePath);
-            } else {
-                rename($sourcePath, $destinationPath);
-            }
-        }
-        $directory->close();
-        return true;
-    }
-
-    private function deleteDirectoryContents($dir) {
-        foreach(glob($dir . '/*') as $file) {
-            if(is_dir($file)) { 
-                $this->deleteDirectoryContents($file);
-                rmdir($file);
-            } else {
-                unlink($file);
-            }
-        }
     }
 
     public function downloadZip($id)

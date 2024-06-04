@@ -22,19 +22,19 @@
         <br>
         <div class="form-group">
             <label for="idade_hunter">Idade:</label>
-            <input type="text" class="form-control" name="idade_hunter" placeholder="Digite a idade do Hunter" value="<?= old('idade_hunter') ?>">
+            <input type="text" class="form-control" name="idade_hunter" placeholder="Digite a idade do Hunter" value="<?= old('idade_hunter') ?>" onkeypress="$(this).mask('00', {reverse: true});">
             <?php echo session()->getFlashdata('errors')["idade_hunter"] ?? "";?>
         </div>
         <br>
         <div class="form-group">
             <label for="altura_hunter">Altura:</label>
-            <input type="text" class="form-control" name="altura_hunter" placeholder="Digite a altura do Hunter" value="<?= old('altura_hunter') ?>">
+            <input type="text" class="form-control" name="altura_hunter" placeholder="Digite a altura do Hunter" value="<?= old('altura_hunter') ?>" onkeypress="$(this).mask('0.00', {reverse: true});">
             <?php echo session()->getFlashdata('errors')["altura_hunter"] ?? "";?>
         </div>
         <br>
         <div class="form-group">
             <label for="peso_hunter">Peso:</label>
-            <input type="text" class="form-control" name="peso_hunter" placeholder="Digite o peso do Hunter" value="<?= old('peso_hunter') ?>">
+            <input type="text" class="form-control" name="peso_hunter" placeholder="Digite o peso do Hunter" value="<?= old('peso_hunter') ?>" onkeypress="$(this).mask('000.00', {reverse: true});">
             <?php echo session()->getFlashdata('errors')["peso_hunter"] ?? "";?>
         </div>
         <br>
