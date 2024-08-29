@@ -24,12 +24,14 @@ composer install
 php spark env 
 ```
 
-3 - Run the following command to generate `encryption.key` value of `.env`.
+3 - Link to copy `.env` details [here](https://github.com/codeigniter4/CodeIgniter4/blob/develop/env).
+
+4 - Run the following command to generate `encryption.key` value of `.env`.
 ```
 php spark key:generate
 ```
 
-4 - Change the following informations in `.env` (I'm using Linux distro like my operating system).
+5 - Change the following informations in `.env` (I'm using Linux distro like my operating system).
 ```
 # MySQL
 database.default.hostname = 127.0.0.1
@@ -50,7 +52,7 @@ database.default.DBPrefix =
 database.default.port = 5432
 ```
 
-5 - When executing the migrations, is necessary use the commands to create some populated tables to some selection fields at forms.
+6 - When executing the migrations, is necessary use the commands to create some populated tables to some selection fields at forms.
 ```
 php spark db:seed
 
@@ -60,7 +62,7 @@ php spark db:seed
 - TipoSanguineoSeeder
 ```
 
-6 - Execute Apache server.
+7 - Execute Apache server.
 ```
 php spark serve
 ```
